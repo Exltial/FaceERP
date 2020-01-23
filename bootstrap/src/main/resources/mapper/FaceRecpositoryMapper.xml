@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ncut.face.erp.service.face.repository.FaceRepository">
-    <select id="getUserFaceInfoByGroupId" parameterType="java.lang.Integer" resultType="com.ncut.face.erp.service.face.domain.FaceUserInfo">
+    <select id="getUserFaceInfoByGroupId" resultType="com.ncut.face.erp.service.face.domain.FaceUserInfo">
         select face_id, name, face_feature
         from user_face_info
     </select>

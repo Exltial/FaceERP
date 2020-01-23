@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface LoginService {
     List<UserFaceInfo> findUserFaceInfoList();
+
+    Boolean faceLogin(String file);
 }

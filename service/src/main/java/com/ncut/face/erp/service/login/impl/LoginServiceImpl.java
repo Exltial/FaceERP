@@ -17,4 +17,9 @@ public class LoginServiceImpl implements LoginService {
     public List<UserFaceInfo> findUserFaceInfoList() {
         return loginRepository.findUserFaceInfoList();
     }
+
+    @Override
+    public Boolean faceLogin(String file) {
+        return null;
+    }
 }

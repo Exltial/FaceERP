@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface FaceRepository {
-    List<FaceUserInfo> getUserFaceInfoByGroupId(Integer groupId);
+    List<FaceUserInfo> getUserFaceInfoByGroupId();
 
     void insertSelective(UserFaceInfo userFaceInfo);
 }

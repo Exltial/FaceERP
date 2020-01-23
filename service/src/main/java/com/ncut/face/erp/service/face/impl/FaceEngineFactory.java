@@ -28,16 +28,11 @@ public class FaceEngineFactory extends BasePooledObjectFactory<FaceEngine> {
 
     }
 
-
     @Override
-    public FaceEngine create() throws Exception {
-
+    public FaceEngine create() {
         FaceEngine faceEngine = new FaceEngine(sdkLibPath);
-        //-=======================
-        int activeCode = faceEngine.activeOnline(appId, sdkKey);
-        System.out.println("faceEngineActiveCode:" + activeCode + "==========================");
-        int initCode = faceEngine.init(engineConfiguration);
-        System.out.println("faceEngineInitCode:" + initCode + "==========================");
+        faceEngine.activeOnline(appId, sdkKey);
+        faceEngine.init(engineConfiguration);
         return faceEngine;
     }
 
@@ -46,12 +41,10 @@ public class FaceEngineFactory extends BasePooledObjectFactory<FaceEngine> {
         return new DefaultPooledObject<>(faceEngine);
     }
 
-
     @Override
     public void destroyObject(PooledObject<FaceEngine> p) throws Exception {
         FaceEngine faceEngine = p.getObject();
-        int unInitCode = faceEngine.unInit();
-        System.out.println("faceEngineUnInitCode:" + unInitCode + "==========================");
+        faceEngine.unInit();
         super.destroyObject(p);
     }
 }

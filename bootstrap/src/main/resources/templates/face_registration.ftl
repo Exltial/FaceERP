@@ -95,6 +95,7 @@
             ctx.drawImage(video, 0, 0, 500, 500);
             var formData = new FormData();
             var base64File = canvas.toDataURL();
+            console.log(base64File);
             var userName = $("#userName").val();
             formData.append("file", base64File);
             formData.append("name", userName);
