@@ -10,9 +10,20 @@ public class Result<T> {
     private String message;
     private T data;
 
+    private Result() {
+
+    }
+
     public Result(T data) {
         this.success = true;
         this.code = 0;
         this.data = data;
+    }
+
+    public static Result buildFailedRes(Integer code, String message) {
+        Result result = new Result();
+        result.setCode(code);
+        result.setMessage(message);
+        return result;
     }
 }

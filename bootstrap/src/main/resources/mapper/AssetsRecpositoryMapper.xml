@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ncut.face.erp.service.assets.repository.AssetsRepository">
+    <insert id="addAssets" parameterType="com.ncut.face.erp.service.assets.domain.AssetsAddVo">
+        INSERT INTO erp_assets (tenant_id, assets_name, assets_id, assets_owner, assets_position, creator, create_time)
+        VALUES (#{tenantId}, #{assetsName}, #{assetsId}, #{assetsOwner}, #{assetsPosition}, #{pin}, now())
+    </insert>
+    <select id="getAssetsList" parameterType="com.ncut.face.erp.service.assets.domain.AssetsOperate" resultType="com.ncut.face.erp.service.assets.domain.AssetsModel">
+        SELECT *
+        FROM erp_assets
+        WHERE tenant_id = #{tenantId}
+          AND deleted = 0
+        ORDER BY create_time DESC
+        LIMIT #{pageRequest.offSet},#{pageRequest.pageSize}
+    </select>
+    <select id="getAssetsById" parameterType="com.ncut.face.erp.service.assets.domain.AssetsOperate" resultType="com.ncut.face.erp.service.assets.domain.AssetsModel">
+        SELECT *
+        FROM erp_assets
+        WHERE tenant_id = #{tenantId}
+          AND id = #{id}
+          AND deleted = 0
+    </select>
+    <update id="deleteAssets" parameterType="com.ncut.face.erp.service.assets.domain.AssetsOperate">
+        UPDATE
+            erp_assets
+        SET deleted=1
+        WHERE tenant_id = #{tenantId}
+          AND id = #{id}
+    </update>
+    <update id="modifyAssets" parameterType="com.ncut.face.erp.service.assets.domain.AssetsModifyVo">
+        UPDATE erp_assets
+        SET
+        <if test="assetsName!=null and assetsName!=''">assets_name=#{assetsName},</if>
+        <if test="assetsId!=null and assetsId!=''">assets_id=#{assetsId},</if>
+        <if test="assetsOwner!=null and assetsOwner!=''">assets_owner=#{assetsOwner},</if>
+        <if test="assetsPosition!=null and assetsPosition!=''">assets_position=#{assetsPosition},</if>
+        modifier=#{pin},
+        modify_time=now()
+        WHERE tenant_id = #{tenantId}
+        AND id = #{id}
+    </update>
+</mapper>
