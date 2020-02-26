@@ -2,7 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ncut.face.erp.service.file.repository.FileRepository">
     <insert id="insertFile">
-        INSERT INTO erp_file (file_id, path)
-        VALUES (#{id}, #{path})
+        INSERT INTO erp_file (file_id, path, face_feature)
+        VALUES (#{id}, #{path}, #{faceFeature})
     </insert>
+    <select id="getPathById" resultType="java.lang.String">
+        SELECT path
+        FROM erp_file
+        WHERE file_id = #{id}
+    </select>
 </mapper>

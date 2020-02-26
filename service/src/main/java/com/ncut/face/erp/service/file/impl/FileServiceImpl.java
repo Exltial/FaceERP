@@ -21,7 +21,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public String save(MultipartFile file, String path, String suffix) {
+    public String save(MultipartFile file, String path, String suffix, byte[] faceFeature) {
         String uniPicId = UUIDUtil.getShortUUID();
         String fileName = uniPicId + "." + suffix;
         //创建文件路径
@@ -32,12 +32,17 @@ public class FileServiceImpl implements FileService {
             dest.getParentFile().mkdirs();
         }
         try {
-            fileRepository.insertFile(uniPicId, path + fileName);
+            fileRepository.insertFile(uniPicId, path + fileName, faceFeature);
             file.transferTo(dest);
             return uniPicId;
         } catch (IOException e) {
             log.error("file upload failed==>e:", e);
             throw new BaseException("图片上传异常,请重试");
         }
+    }
+
+    @Override
+    public String getPathById(String picId) {
+        return fileRepository.getPathById(picId);
     }
 }
