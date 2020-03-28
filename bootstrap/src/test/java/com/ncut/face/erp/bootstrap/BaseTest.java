@@ -17,15 +17,14 @@ public class BaseTest {
 
     @Test
     public void encodeTest() throws Exception {
-        String str = "123";
+        String str = "123456";
         byte[] bytes = EncodeUtil.encryptByPublicKey(str, publicKey);
         System.out.println(EncodeUtil.encryptBASE64(bytes));
     }
 
     @Test
     public void decodeTest() throws Exception {
-        String str = "q0MvNjrM7A60qVcRo+7/m0G70HITBxpGtHfyvTUPwUNw/LzeFI9q9EXgzHYFoYvE1uLH+95/V5bYAB9aA4R/a/bPIf97xUWne2LKUhNdRL+BGO7SfKt4r7axkPuNeML+p0ho1ZZfH81pdkTZSRil3Ih7OVDjpFElVB2LgKKtq6M=";
-        byte[] bytes = EncodeUtil.decryptByPrivateKey(str, privateKey);
-        System.out.println(new String(bytes));
+        String str = "l41Lmra/Ooc5rAChYlv4SbuS5IhziWBLLOn37gCPgBQYgIBdxy87TDjyBPgaHkLoG+hEV6t0zD1d9kyLpvMv0gl5n6y35og3PftPyj+0ScgZfg2igWqn8narOlt1xEenYT1TWCW5WM2EgWm6tCGVx4kHZF+DFVG2czprDRIiBK0=";
+        System.out.println(EncodeUtil.decryptByPrivateKey(str, privateKey));
     }
 }

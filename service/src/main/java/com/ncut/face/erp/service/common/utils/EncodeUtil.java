@@ -67,7 +67,7 @@ public class EncodeUtil {
         return signature.verify(decryptBASE64(sign));
     }
 
-    public static byte[] decryptByPrivateKey(byte[] data, String key) throws Exception {
+    public static String decryptByPrivateKey(byte[] data, String key) throws Exception {
         // 对密钥解密
         byte[] keyBytes = decryptBASE64(key);
         // 取得私钥
@@ -77,14 +77,17 @@ public class EncodeUtil {
         // 对数据解密
         Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
-        return cipher.doFinal(data);
+        return new String(cipher.doFinal(data));
     }
 
     /**
      * 解密<br> * 用私钥解密 * * @param data * @param key * @return * @throws Exception
+     *
+     * @return
      */
-    public static byte[] decryptByPrivateKey(String data, String key)
+    public static String decryptByPrivateKey(String data, String key)
             throws Exception {
+        data = data.replace(" ", "+");
         return decryptByPrivateKey(decryptBASE64(data), key);
     }
 

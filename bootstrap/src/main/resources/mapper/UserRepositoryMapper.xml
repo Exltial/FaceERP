@@ -5,8 +5,22 @@
         SELECT DISTINCT tenant_id
         FROM erp_user
     </select>
-    <insert id="insertUser" parameterType="com.ncut.face.erp.service.login.domain.UserRegistryModel">
-        INSERT INTO erp_user (tenant_id, user_name, password, user_role, face_id, create_time)
-        VALUES (#{tenantId}, #{userName}, #{password}, #{userRole}, #{picId}, now())
+    <insert id="insertUser" parameterType="com.ncut.face.erp.service.user.domain.UserRegistryModel">
+        INSERT INTO erp_user (tenant_id, user_name, password, user_role, face_id, create_time, face_feature, pin)
+        VALUES (#{tenantId}, #{userName}, #{password}, #{userRole}, #{faceId}, now(), #{faceFeature}, #{pin})
     </insert>
+    <select id="getInfoByPin" parameterType="java.lang.String" resultType="com.ncut.face.erp.service.user.domain.UserInfoModel">
+        SELECT *
+        FROM erp_user
+        WHERE pin = #{pin}
+    </select>
+    <select id="getAllFeature" resultType="com.ncut.face.erp.service.user.domain.FaceIdModel">
+        SELECT face_feature, face_id
+        FROM erp_user
+    </select>
+    <select id="getInfoByFaceId" resultType="com.ncut.face.erp.service.user.domain.UserInfoModel">
+        SELECT *
+        FROM erp_user
+        WHERE face_id = #{faceId}
+    </select>
 </mapper>

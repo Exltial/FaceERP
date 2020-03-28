@@ -1,4 +1,4 @@
-package com.ncut.face.erp.service.login.domain;
+package com.ncut.face.erp.service.user.domain;
 
 import lombok.Data;
 
@@ -6,7 +6,9 @@ import lombok.Data;
 public class UserRegistryModel {
     private String tenantId;
     private String userName;
-    private String picId;
+    private String faceId;
     private String password;
     private String userRole;
+    private byte[] faceFeature;
+    private String pin;
 }

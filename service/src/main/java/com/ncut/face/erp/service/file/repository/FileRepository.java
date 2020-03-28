@@ -7,4 +7,6 @@ public interface FileRepository {
     void insertFile(String id, String path, byte[] faceFeature);
 
     String getPathById(String picId);
+
+    byte[] getFaceFeatureById(String faceId);
 }

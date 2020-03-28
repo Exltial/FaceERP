@@ -41,7 +41,7 @@ public class FileController {
         } catch (IOException e) {
             throw new BaseException("上传图片有误,请检查后上传");
         }
-        String fileId = fileService.save(file, rootPath + registryPath, suffix, faceFeature);
-        return new Result<>(fileId);
+        String faceId = fileService.save(file, rootPath + registryPath, suffix, faceFeature);
+        return new Result<>(faceId);
     }
 }

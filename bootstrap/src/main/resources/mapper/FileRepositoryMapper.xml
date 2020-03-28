@@ -10,4 +10,9 @@
         FROM erp_file
         WHERE file_id = #{id}
     </select>
+    <select id="getFaceFeatureById">
+        SELECT face_feature
+        FROM erp_file
+        WHERE file_id = #{id}
+    </select>
 </mapper>

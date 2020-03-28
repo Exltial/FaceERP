@@ -6,6 +6,8 @@ import com.ncut.face.erp.service.notice.domain.NoticeAddVo;
 import com.ncut.face.erp.service.notice.domain.NoticeModel;
 import com.ncut.face.erp.service.notice.domain.NoticeModifyVo;
 import com.ncut.face.erp.service.notice.domain.NoticeOperate;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +26,8 @@ public class NoticeApiController {
     }
 
     @RequestMapping("/getNoticeList")
+    @RequiresPermissions("ADMIN")
+    @RequiresRoles("ADMIN")
     public Result getNoticeList(NoticeOperate opt) {
         List list = noticeService.getNoticeList(opt);
         return new Result<>(list);
