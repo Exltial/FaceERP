@@ -1,5 +1,6 @@
 package com.ncut.face.erp.service.file.repository;
 
+import com.ncut.face.erp.service.file.domain.FileModel;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -8,5 +9,5 @@ public interface FileRepository {
 
     String getPathById(String picId);
 
-    byte[] getFaceFeatureById(String faceId);
+    FileModel getFaceFeatureById(String faceId);
 }

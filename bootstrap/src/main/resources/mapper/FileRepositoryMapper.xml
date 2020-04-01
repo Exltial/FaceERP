@@ -10,8 +10,8 @@
         FROM erp_file
         WHERE file_id = #{id}
     </select>
-    <select id="getFaceFeatureById">
-        SELECT face_feature
+    <select id="getFaceFeatureById" resultType="com.ncut.face.erp.service.file.domain.FileModel">
+        SELECT face_feature, file_id, path
         FROM erp_file
         WHERE file_id = #{id}
     </select>

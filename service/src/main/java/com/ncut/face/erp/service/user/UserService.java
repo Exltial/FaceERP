@@ -11,13 +11,10 @@ public interface UserService {
 
     void doRegistry(UserRegistryVo vo);
 
-    UserInfoModel getInfoByPin(String pin);
-
     String getFaceIdByFeature(byte[] feature);
 
     UserInfoModel getInfoByFaceId(String faceId);
 
     void doLogin(UserLoginVo user);
 
-    String getFaceId(byte[] faceFeature);
 }

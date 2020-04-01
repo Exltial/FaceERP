@@ -6,6 +6,9 @@ import lombok.Data;
 public class UserRegistryVo {
     private String tenantId;
     private String userName;
-    private String password;
+    /**
+     * 角色，ADMIN为管理员，USER为用户
+     */
+    private String role;
     private String faceId;
 }

@@ -7,7 +7,6 @@ public class UserInfoModel {
     private String tenantId;
     private String userName;
     private String faceId;
-    private String pin;
     private String password;
     private String userRole;
     private byte[] feature;

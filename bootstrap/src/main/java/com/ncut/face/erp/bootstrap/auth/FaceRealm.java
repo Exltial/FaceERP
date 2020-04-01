@@ -2,6 +2,7 @@ package com.ncut.face.erp.bootstrap.auth;
 
 import com.ncut.face.erp.service.user.UserService;
 import com.ncut.face.erp.service.user.domain.UserInfoModel;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -20,8 +21,8 @@ public class FaceRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         //获取用户pin
-        String pin = (String) principalCollection.getPrimaryPrincipal();
-        UserInfoModel user = userService.getInfoByPin(pin);
+        String faceId = (String) principalCollection.getPrimaryPrincipal();
+        UserInfoModel user = userService.getInfoByFaceId(faceId);
         //添加角色和权限
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addRole(user.getUserRole());
@@ -36,14 +37,15 @@ public class FaceRealm extends AuthorizingRealm {
             return null;
         }
         //获取用户信息
-        String pin = authenticationToken.getPrincipal().toString();
-        UserInfoModel user = userService.getInfoByPin(pin);
+        String faceId = authenticationToken.getPrincipal().toString();
+        UserInfoModel user = userService.getInfoByFaceId(faceId);
+        SecurityUtils.getSubject().getSession().setAttribute("user", user);
         if (user == null) {
             //这里返回后会报出对应异常
             return null;
         } else {
             //这里验证authenticationToken和simpleAuthenticationInfo的信息
-            return new SimpleAuthenticationInfo(pin, user.getPassword(), getName());
+            return new SimpleAuthenticationInfo(user.getFaceId(), user.getPassword(), user.getUserName());
         }
     }
 }

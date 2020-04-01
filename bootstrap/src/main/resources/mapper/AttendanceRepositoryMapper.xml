@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ncut.face.erp.service.attendance.repository.AttendanceRepository">
+    <insert id="signIn" parameterType="com.ncut.face.erp.service.attendance.domain.AttendanceModel">
+        INSERT INTO erp_attendance (tenant_id, face_id, user_name, action, sign_in_time)
+        VALUES (#{tenantId}, #{faceId}, #{userName}, #{action}, #{signInTime})
+    </insert>
+    <insert id="signOut" parameterType="com.ncut.face.erp.service.attendance.domain.AttendanceModel">
+        INSERT INTO erp_attendance (tenant_id, face_id, user_name, action, sign_out_time)
+        VALUES (#{tenantId}, #{faceId}, #{userName}, #{action}, #{signOutTime})
+    </insert>
+    <select id="getAttendanceList" parameterType="com.ncut.face.erp.service.attendance.domain.AttendanceQuery" resultType="com.ncut.face.erp.service.attendance.domain.AttendanceModel">
+        SELECT *
+        FROM erp_attendance
+        WHERE tenant_id = #{tenantId}
+        <if test="faceId!=null and faceId!=''">
+            AND face_id=#{faceId}
+        </if>
+        AND( DATE_FORMAT(sign_in_time,'%Y-%m-%d')=#{date}
+        or DATE_FORMAT(sign_out_time,'%Y-%m-%d')=#{date})
+    </select>
+</mapper>
