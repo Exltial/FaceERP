@@ -1,17 +1,62 @@
 package com.ncut.face.erp.bootstrap.controller.api;
 
-import com.alibaba.fastjson.JSON;
+import com.ncut.face.erp.service.achievements.AchievementsService;
+import com.ncut.face.erp.service.achievements.domain.AchievementOpt;
+import com.ncut.face.erp.service.achievements.domain.AchievementVo;
+import com.ncut.face.erp.service.achievements.domain.AchievementsModel;
 import com.ncut.face.erp.service.common.Result;
-import com.ncut.face.erp.service.user.domain.UserInfoModel;
-import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+import java.util.List;
+
 @RestController
 public class AchievementsController {
+    @Resource
+    AchievementsService achievementsService;
+
     @RequestMapping("/addAchievement")
-    public Result addAchievement() {
-        UserInfoModel principal = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
-        return new Result<>(JSON.toJSONString(principal));
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result addAchievement(@RequestBody AchievementVo vo) {
+        achievementsService.addAch(vo);
+        return new Result<>(true);
+    }
+
+    @RequestMapping("/getAchievementList")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result getAchievementList() {
+        List<AchievementsModel> list = achievementsService.getAchList();
+        return new Result<>(list);
+    }
+
+    @RequestMapping("/getAchievementInfo")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result getAchievementInfo(@RequestBody AchievementOpt opt) {
+        AchievementsModel model = achievementsService.getAchInfo(opt);
+        return new Result<>(model);
+    }
+
+    @RequestMapping("/deleteAchievement")
+    @RequiresPermissions(value = "ADMIN")
+    @RequiresRoles(value = "ADMIN")
+    public Result deleteAchievement(@RequestBody AchievementOpt opt) {
+        achievementsService.deleteAch(opt);
+        return new Result<>(true);
+    }
+
+    @RequestMapping("/modifyAchievement")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result modifyAchievement(@RequestBody AchievementVo opt) {
+        achievementsService.modifyAch(opt);
+        return new Result<>(true);
     }
 }

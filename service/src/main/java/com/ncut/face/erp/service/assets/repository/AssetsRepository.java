@@ -1,22 +1,20 @@
 package com.ncut.face.erp.service.assets.repository;
 
-import com.ncut.face.erp.service.assets.domain.AssetsAddVo;
 import com.ncut.face.erp.service.assets.domain.AssetsModel;
-import com.ncut.face.erp.service.assets.domain.AssetsModifyVo;
-import com.ncut.face.erp.service.assets.domain.AssetsOperate;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
 public interface AssetsRepository {
-    void addAssets(AssetsAddVo vo);
+    void addAssets(AssetsModel vo);
 
-    List getAssetsList(AssetsOperate opt);
+    List getAssetsList(@Param("tenantId") String tenantId);
 
-    void modifyAssets(AssetsModifyVo vo);
+    void modifyAssets(AssetsModel vo);
 
-    AssetsModel getAssetsById(AssetsOperate opt);
+    AssetsModel getAssetsById(@Param("tenantId") String tenantId, @Param("id") Long id);
 
-    void deleteAssets(AssetsOperate opt);
+    void deleteAssets(@Param("tenantId") String tenantId, @Param("id") Long id);
 }

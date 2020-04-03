@@ -10,7 +10,7 @@ import java.util.List;
 public interface AssetsService {
     void addAssets(AssetsAddVo vo);
 
-    List getAssetsList(AssetsOperate opt);
+    List getAssetsList();
 
     void modifyAssets(AssetsModifyVo vo);
 

@@ -6,6 +6,10 @@ import com.ncut.face.erp.service.assets.domain.AssetsModel;
 import com.ncut.face.erp.service.assets.domain.AssetsModifyVo;
 import com.ncut.face.erp.service.assets.domain.AssetsOperate;
 import com.ncut.face.erp.service.common.Result;
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,31 +23,41 @@ public class AssetsController {
     AssetsService assetsService;
 
     @RequestMapping("/addAssets")
-    public Result addAssets(AssetsAddVo vo) {
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result addAssets(@RequestBody AssetsAddVo vo) {
         assetsService.addAssets(vo);
         return new Result<>(true);
     }
 
     @RequestMapping("/getAssetsList")
-    public Result getAssetsList(AssetsOperate opt) {
-        List list = assetsService.getAssetsList(opt);
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result getAssetsList() {
+        List list = assetsService.getAssetsList();
         return new Result<>(list);
     }
 
     @RequestMapping("/modifyAssets")
-    public Result modifyAssets(AssetsModifyVo vo) {
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result modifyAssets(@RequestBody AssetsModifyVo vo) {
         assetsService.modifyAssets(vo);
         return new Result<>(true);
     }
 
     @RequestMapping("/getAssetsById")
-    public Result getAssetsById(AssetsOperate opt) {
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result getAssetsById(@RequestBody AssetsOperate opt) {
         AssetsModel model = assetsService.getAssetsById(opt);
         return new Result<>(model);
     }
 
     @RequestMapping("/deleteAssets")
-    public Result deleteAssets(AssetsOperate opt) {
+    @RequiresPermissions("ADMIN")
+    @RequiresRoles("ADMIN")
+    public Result deleteAssets(@RequestBody AssetsOperate opt) {
         assetsService.deleteAssets(opt);
         return new Result<>(true);
     }

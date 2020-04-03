@@ -1,11 +1,12 @@
 package com.ncut.face.erp.service.notice.impl;
 
 import com.ncut.face.erp.service.notice.NoticeService;
-import com.ncut.face.erp.service.notice.domain.NoticeAddVo;
 import com.ncut.face.erp.service.notice.domain.NoticeModel;
-import com.ncut.face.erp.service.notice.domain.NoticeModifyVo;
 import com.ncut.face.erp.service.notice.domain.NoticeOperate;
+import com.ncut.face.erp.service.notice.domain.NoticeVo;
 import com.ncut.face.erp.service.notice.repository.NoticeRepository;
+import com.ncut.face.erp.service.user.domain.UserInfoModel;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,18 +18,26 @@ public class NoticeServiceImpl implements NoticeService {
     NoticeRepository noticeRepository;
 
     @Override
-    public void addNotice(NoticeAddVo vo) {
-        noticeRepository.addNotice(vo);
+    public void addNotice(NoticeVo vo) {
+        NoticeModel model = new NoticeModel();
+        UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
+        model.setTenantId(user.getTenantId());
+        model.setTopic(vo.getTopic());
+        model.setContent(vo.getContent());
+        model.setCreator(user.getUserName());
+        noticeRepository.addNotice(model);
     }
 
     @Override
-    public List getNoticeList(NoticeOperate opt) {
-        return noticeRepository.getNoticeList(opt);
+    public List getNoticeList() {
+        UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
+        return noticeRepository.getNoticeList(user.getTenantId());
     }
 
     @Override
     public NoticeModel getNoticeById(NoticeOperate opt) {
-        return noticeRepository.getNoticeById(opt);
+        UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
+        return noticeRepository.getNoticeById(user.getTenantId(), opt.getId());
     }
 
     @Override
@@ -37,7 +46,14 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void modifyNotice(NoticeModifyVo vo) {
-        noticeRepository.modifyNotice(vo);
+    public void modifyNotice(NoticeVo vo) {
+        UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
+        NoticeModel model = new NoticeModel();
+        model.setId(vo.getId());
+        model.setTenantId(user.getTenantId());
+        model.setTopic(vo.getTopic());
+        model.setContent(vo.getContent());
+        model.setModifier(user.getUserName());
+        noticeRepository.modifyNotice(model);
     }
 }

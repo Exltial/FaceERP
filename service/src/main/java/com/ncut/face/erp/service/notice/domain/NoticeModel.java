@@ -6,13 +6,12 @@ import java.util.Date;
 
 @Data
 public class NoticeModel {
-    private Long tenantId;
     private Long id;
+    private String tenantId;
     private String topic;
     private String content;
-    private Date createTime;
-    private Date modifyTime;
-    private String pin;
     private String creator;
     private String modifier;
+    private Date createTime;
+    private Date modifyTime;
 }

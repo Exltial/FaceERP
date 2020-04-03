@@ -6,10 +6,14 @@ import java.util.Date;
 
 @Data
 public class AchievementsModel {
-    private Long tenantId;
     private Long id;
-    private Integer achieveCategory;
-    private String achieveCateName;
+    private String tenantId;
+    private AchievementTypeEnum achTypeEnum;
+    private Integer achType;
+    private String achTypeDesc;
+    private String achName;
+    private String achUrl;
+    private String achAuthor;
     private String creator;
     private String modifier;
     private Date createTime;

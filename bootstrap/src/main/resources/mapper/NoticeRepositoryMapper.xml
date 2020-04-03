@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ncut.face.erp.service.notice.repository.NoticeRepository">
-    <insert id="addNotice" parameterType="com.ncut.face.erp.service.notice.domain.NoticeAddVo">
-        INSERT INTO erp_notice (topic, content, creator, create_time, tenant_id)
-        VALUES (#{topic}, #{content}, #{pin}, now(), #{tenantId})
+    <insert id="addNotice" parameterType="com.ncut.face.erp.service.notice.domain.NoticeModel">
+        INSERT INTO erp_notice (tenant_id, topic, content, creator, create_time, deleted)
+        VALUES (#{tenantId}, #{topic}, #{content}, #{creator}, now(), 0)
     </insert>
-    <select id="getNoticeList" parameterType="com.ncut.face.erp.service.notice.domain.NoticeOperate" resultType="com.ncut.face.erp.service.notice.domain.NoticeModel">
+    <select id="getNoticeList" parameterType="java.lang.String" resultType="com.ncut.face.erp.service.notice.domain.NoticeModel">
         SELECT *
         FROM erp_notice
         WHERE tenant_id = #{tenantId}
           AND deleted = 0
         ORDER BY create_time DESC
-        LIMIT #{pageRequest.offSet},#{pageRequest.pageSize}
+        LIMIT 5
     </select>
-    <select id="getNoticeById" parameterType="com.ncut.face.erp.service.notice.domain.NoticeOperate" resultType="com.ncut.face.erp.service.notice.domain.NoticeModel">
+    <select id="getNoticeById" resultType="com.ncut.face.erp.service.notice.domain.NoticeModel">
         SELECT *
         FROM erp_notice
         WHERE tenant_id = #{tenantId}
@@ -24,16 +24,15 @@
         UPDATE
             erp_notice
         SET deleted=1
-        WHERE tenant_id = #{tenantId}
-          AND id = #{id}
+        WHERE id = #{id}
     </update>
-    <update id="modifyNotice" parameterType="com.ncut.face.erp.service.notice.domain.NoticeModifyVo">
+    <update id="modifyNotice" parameterType="com.ncut.face.erp.service.notice.domain.NoticeModel">
         UPDATE erp_notice
         SET
         <if test="topic!=null and topic!=''">topic=#{topic},</if>
         <if test="content!=null and content!=''">content=#{content},</if>
         modify_time=now(),
-        modifier=#{pin}
+        modifier=#{modifier}
         WHERE tenant_id = #{tenantId}
         AND id = #{id}
     </update>
