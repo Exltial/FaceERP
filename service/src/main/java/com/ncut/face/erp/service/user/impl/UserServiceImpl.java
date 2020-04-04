@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getFaceIdByFeature(byte[] feature) {
         List<FaceIdModel> faceList = userRepository.getAllFeature();
-        List<FaceIdModel> list = faceList.parallelStream().filter(item -> {
+        List<FaceIdModel> list = faceList.stream().filter(item -> {
             Integer score = faceService.compareFace(feature, item.getFaceFeature());
             item.setScore(score);
             return score > rate;

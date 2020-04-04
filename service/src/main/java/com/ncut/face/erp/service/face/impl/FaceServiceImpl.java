@@ -57,13 +57,9 @@ public class FaceServiceImpl implements FaceService {
 
         //功能配置
         FunctionConfiguration functionConfiguration = new FunctionConfiguration();
-        functionConfiguration.setSupportAge(true);
         functionConfiguration.setSupportFace3dAngle(true);
         functionConfiguration.setSupportFaceDetect(true);
         functionConfiguration.setSupportFaceRecognition(true);
-        functionConfiguration.setSupportGender(true);
-        functionConfiguration.setSupportLiveness(true);
-        functionConfiguration.setSupportIRLiveness(true);
         engineConfiguration.setFunctionConfiguration(functionConfiguration);
         String sdkLibPath = ResourceUtils.getURL("classpath:lib/").getPath();
         faceEngineObjectPool = new GenericObjectPool(new FaceEngineFactory(sdkLibPath, appId, sdkKey, engineConfiguration), poolConfig);//底层库算法对象池
@@ -150,6 +146,7 @@ public class FaceServiceImpl implements FaceService {
         sourceFaceFeature.setFeatureData(faceFeature);
         FaceSimilar faceSimilar = new FaceSimilar();
         faceEngine.compareFaceFeature(targetFaceFeature, sourceFaceFeature, faceSimilar);
+        faceEngineObjectPool.returnObject(faceEngine);
         //获取相似值
         return BigDecimal.valueOf(faceSimilar.getScore()).multiply(BigDecimal.valueOf(100f)).intValue();
     }
