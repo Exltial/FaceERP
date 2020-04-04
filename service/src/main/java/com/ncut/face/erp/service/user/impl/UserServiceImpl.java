@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     FileService fileService;
     @Resource
     FaceService faceService;
+
     @Value("${private.key}")
     private String privateKey;
     @Value("${face.compare.rate}")
@@ -59,6 +60,18 @@ public class UserServiceImpl implements UserService {
         String path = fileService.getPathById(vo.getFaceId());
         AssertUtil.notEmpty(path, "图片文件未找到,请重新上传");
         FileModel faceFeature = fileRepository.getFaceFeatureById(vo.getFaceId());
+
+        List<FaceIdModel> list = userRepository.getAllFeature(vo.getTenantId());
+        if (!CollectionUtils.isEmpty(list)) {
+            List<FaceIdModel> mathList = list.parallelStream().filter(item -> {
+                Integer score = faceService.compareFace(faceFeature.getFaceFeature(), item.getFaceFeature());
+                item.setScore(score);
+                return score > rate;
+            }).sorted(Comparator.comparing(FaceIdModel::getScore).reversed()).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(mathList)) {
+                throw new BaseException("已存在相同用户,请登录");
+            }
+        }
         String password = "123456";
 //        try {
 //            password = EncodeUtil.decryptByPrivateKey(vo.getPassword(), privateKey);
@@ -75,8 +88,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getFaceIdByFeature(byte[] feature) {
-        List<FaceIdModel> faceList = userRepository.getAllFeature();
-        List<FaceIdModel> list = faceList.stream().filter(item -> {
+        List<FaceIdModel> faceList = userRepository.getAllFeature(null);
+        List<FaceIdModel> list = faceList.parallelStream().filter(item -> {
             Integer score = faceService.compareFace(feature, item.getFaceFeature());
             item.setScore(score);
             return score > rate;

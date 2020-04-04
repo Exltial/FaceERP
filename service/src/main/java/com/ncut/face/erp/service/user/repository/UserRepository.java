@@ -15,7 +15,7 @@ public interface UserRepository {
 
     UserInfoModel getInfoByPin(String pin);
 
-    List<FaceIdModel> getAllFeature();
+    List<FaceIdModel> getAllFeature(String tenantId);
 
     UserInfoModel getInfoByFaceId(String faceId);
 }

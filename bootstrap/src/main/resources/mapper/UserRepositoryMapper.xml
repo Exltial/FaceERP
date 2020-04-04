@@ -9,9 +9,12 @@
         INSERT INTO erp_user (tenant_id, user_name, password, user_role, face_id, create_time, face_feature)
         VALUES (#{tenantId}, #{userName}, #{password}, #{userRole}, #{faceId}, now(), #{faceFeature})
     </insert>
-    <select id="getAllFeature" resultType="com.ncut.face.erp.service.user.domain.FaceIdModel">
+    <select id="getAllFeature" parameterType="java.lang.String" resultType="com.ncut.face.erp.service.user.domain.FaceIdModel">
         SELECT face_feature, face_id
         FROM erp_user
+        <if test="tenantId!=null and tenantId !=''">
+            WHERE tenant_id=#{tenantId}
+        </if>
     </select>
     <select id="getInfoByFaceId" resultType="com.ncut.face.erp.service.user.domain.UserInfoModel">
         SELECT *
