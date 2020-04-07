@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
             //进行验证，这里可以捕获异常，然后返回对应信息
             subject.login(usernamePasswordToken);
         } catch (AuthenticationException e) {
-            throw new BaseException("密码错误！");
+            throw new BaseException("用户未注册");
         } catch (AuthorizationException e) {
             throw new BaseException("没有权限");
         }
