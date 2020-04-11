@@ -1,6 +1,7 @@
 package com.ncut.face.erp.bootstrap.controller.api;
 
 import com.ncut.face.erp.service.common.Result;
+import com.ncut.face.erp.service.common.exception.BaseException;
 import com.ncut.face.erp.service.common.utils.AssertUtil;
 import com.ncut.face.erp.service.face.FaceService;
 import com.ncut.face.erp.service.user.UserService;
@@ -24,13 +25,22 @@ public class UserController {
 
     @RequestMapping("/getFaceId")
     public Result getFaceId(MultipartFile file) throws IOException {
+        if (file == null) {
+            throw new BaseException("未检测到人脸");
+        }
         byte[] faceFeature = faceService.getFaceFeature(file.getBytes());
         return new Result<>(userService.getFaceIdByFeature(faceFeature));
     }
 
     @RequestMapping("/login")
-    public Result login(@RequestBody UserLoginVo user) {
-        AssertUtil.notEmpty(user.getFaceId(), "未获取到人脸信息");
+    public Result login(MultipartFile file) throws IOException {
+        if (file == null) {
+            throw new BaseException("未检测到人脸");
+        }
+        byte[] faceFeature = faceService.getFaceFeature(file.getBytes());
+        String faceId = userService.getFaceIdByFeature(faceFeature);
+        UserLoginVo user = new UserLoginVo();
+        user.setFaceId(faceId);
         userService.doLogin(user);
         return new Result<>(true);
     }
