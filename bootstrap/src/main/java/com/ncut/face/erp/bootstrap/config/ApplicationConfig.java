@@ -22,19 +22,24 @@ public class ApplicationConfig {
         resolver.setExposeSessionAttributes(true);
         return resolver;
     }
-
-    private CorsConfiguration buildConfig() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*"); // 允许任何域名使用
-        corsConfiguration.addAllowedHeader("*"); // 允许任何头
-        corsConfiguration.addAllowedMethod("*"); // 允许任何方法（post、get等）
-        return corsConfiguration;
-    }
-
     @Bean
     public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", buildConfig()); // 对接口配置跨域设置
-        return new CorsFilter(source);
+        //1.添加CORS配置信息
+        CorsConfiguration config = new CorsConfiguration();
+        //放行哪些原始域
+        config.addAllowedOrigin("*");
+        //是否发送Cookie信息
+        config.setAllowCredentials(true);
+        //放行哪些原始域(请求方式)
+        config.addAllowedMethod("*");
+        //放行哪些原始域(头部信息)
+        config.addAllowedHeader("*");
+
+        //2.添加映射路径
+        UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
+        configSource.registerCorsConfiguration("/**", config);
+
+        //3.返回新的CorsFilter.
+        return new CorsFilter(configSource);
     }
 }

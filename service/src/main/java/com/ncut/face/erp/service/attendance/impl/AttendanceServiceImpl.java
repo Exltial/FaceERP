@@ -6,12 +6,14 @@ import com.ncut.face.erp.service.attendance.domain.AttendanceModel;
 import com.ncut.face.erp.service.attendance.domain.AttendanceQuery;
 import com.ncut.face.erp.service.attendance.repository.AttendanceRepository;
 import com.ncut.face.erp.service.common.enums.RoleEnum;
+import com.ncut.face.erp.service.common.exception.BaseException;
 import com.ncut.face.erp.service.user.domain.UserInfoModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,6 +26,9 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public void signIn(UserInfoModel user) {
+        if (user.getUserRole().equals(RoleEnum.ADMIN.getRoleCode())) {
+            throw new BaseException("管理员无须考勤");
+        }
         AttendanceModel attendanceModel = new AttendanceModel();
         attendanceModel.setTenantId(user.getTenantId());
         attendanceModel.setFaceId(user.getFaceId());
@@ -31,11 +36,23 @@ public class AttendanceServiceImpl implements AttendanceService {
         //1为签到
         attendanceModel.setAction(1);
         attendanceModel.setSignInTime(new Date());
-        attendanceRepository.signIn(attendanceModel);
+        AttendanceQuery query = new AttendanceQuery();
+        query.setTenantId(user.getTenantId());
+        query.setFaceId(user.getFaceId());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String date = format.format(new Date());
+        query.setDate(date);
+        Date signInTime = attendanceRepository.getSignInTime(query);
+        if (signInTime == null) {
+            attendanceRepository.signIn(attendanceModel);
+        }
     }
 
     @Override
     public void signOut(UserInfoModel user) {
+        if (user.getUserRole().equals(RoleEnum.ADMIN.getRoleCode())) {
+            throw new BaseException("管理员无须考勤");
+        }
         AttendanceModel attendanceModel = new AttendanceModel();
         attendanceModel.setTenantId(user.getTenantId());
         attendanceModel.setFaceId(user.getFaceId());
@@ -43,14 +60,24 @@ public class AttendanceServiceImpl implements AttendanceService {
         //1为签到
         attendanceModel.setAction(2);
         attendanceModel.setSignOutTime(new Date());
+
+        AttendanceQuery query = new AttendanceQuery();
+        query.setTenantId(user.getTenantId());
+        query.setFaceId(user.getFaceId());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        String date = format.format(new Date());
+        query.setDate(date);
+        Date signOutTime = attendanceRepository.getSignOutTime(query);
+        if (signOutTime != null) {
+            attendanceRepository.deleteSignOutRecord(query);
+        }
         attendanceRepository.signOut(attendanceModel);
     }
 
     @Override
-    public List<AttendanceModel> getAttendanceList(UserInfoModel user, String date) {
+    public List<AttendanceModel> getAttendanceList(UserInfoModel user) {
         AttendanceQuery query = new AttendanceQuery();
         query.setTenantId(user.getTenantId());
-        query.setDate(date);
         if (!RoleEnum.ADMIN.getRoleCode().equals(user.getUserRole())) {
             //查用户签到信息
             query.setFaceId(user.getFaceId());
@@ -77,10 +104,10 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
         list.forEach(item -> {
             if (item.getSignInTime() == null || item.getSignOutTime() == null) {
-                item.setAttendanceStatus("考勤异常");
+                item.setAttendanceStatus("异常");
             } else {
                 if ((item.getSignOutTime().getTime() - item.getSignInTime().getTime()) / (1000 * 60 * 60) < attendanceHour) {
-                    item.setAttendanceStatus("考勤时长不足" + attendanceHour + "小时");
+                    item.setAttendanceStatus("异常");
                 } else {
                     item.setAttendanceStatus("正常");
                 }

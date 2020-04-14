@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface UserRepository {
-    List getAllTenantId();
+    List getAllTenantIdWithoutAdmin();
 
     void insertUser(UserRegistryModel userRegistryModel);
 

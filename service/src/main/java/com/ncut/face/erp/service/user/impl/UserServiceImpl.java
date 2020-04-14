@@ -44,13 +44,8 @@ public class UserServiceImpl implements UserService {
     private Integer rate;
 
     @Override
-    public List getAllTenantId() {
-        return userRepository.getAllTenantId();
-    }
-
-    @Override
     public void doRegistry(UserRegistryVo vo) {
-        List tenantList = userRepository.getAllTenantId();
+        List tenantList = userRepository.getAllTenantIdWithoutAdmin();
         if (vo.getRole().equals(RoleEnum.ADMIN.getRoleCode()) && tenantList.contains(vo.getTenantId())) {
             throw new BaseException("用户组已存在,请注册普通用户权限");
         }
@@ -61,7 +56,7 @@ public class UserServiceImpl implements UserService {
         AssertUtil.notEmpty(path, "图片文件未找到,请重新上传");
         FileModel faceFeature = fileRepository.getFaceFeatureById(vo.getFaceId());
 
-        List<FaceIdModel> list = userRepository.getAllFeature(vo.getTenantId());
+        List<FaceIdModel> list = userRepository.getAllFeature(null);
         if (!CollectionUtils.isEmpty(list)) {
             List<FaceIdModel> mathList = list.parallelStream().filter(item -> {
                 Integer score = faceService.compareFace(faceFeature.getFaceFeature(), item.getFaceFeature());

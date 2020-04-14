@@ -10,5 +10,5 @@ public interface AttendanceService {
 
     void signOut(UserInfoModel user);
 
-    List<AttendanceModel> getAttendanceList(UserInfoModel user, String date);
+    List<AttendanceModel> getAttendanceList(UserInfoModel user);
 }

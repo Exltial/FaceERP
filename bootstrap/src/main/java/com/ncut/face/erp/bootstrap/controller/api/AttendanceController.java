@@ -8,13 +8,11 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,8 +28,8 @@ public class AttendanceController {
      * 签到
      */
     @RequestMapping("/signIn")
-    @RequiresPermissions("USER")
-    @RequiresRoles("USER")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
     public Result signIn() {
         UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
         attendanceService.signIn(user);
@@ -42,8 +40,8 @@ public class AttendanceController {
      * 签退
      */
     @RequestMapping("/signOut")
-    @RequiresPermissions("USER")
-    @RequiresRoles("USER")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
     public Result signOut() {
         UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
         attendanceService.signOut(user);
@@ -56,13 +54,18 @@ public class AttendanceController {
     @RequestMapping("/attendanceList")
     @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
     @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
-    public Result attendanceList(String date) {
+    public Result attendanceList() {
         UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
-        if (StringUtils.isEmpty(date)) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            date = format.format(new Date());
-        }
-        List<AttendanceModel> list = attendanceService.getAttendanceList(user, date);
+        List<AttendanceModel> list = attendanceService.getAttendanceList(user);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+        list.forEach(item -> {
+            if (item.getSignInTime() != null) {
+                item.setSignInTimeStr(timeFormat.format(item.getSignInTime()));
+            }
+            if (item.getSignOutTime() != null) {
+                item.setSignOutTimeStr(timeFormat.format(item.getSignOutTime()));
+            }
+        });
         return new Result<>(list);
     }
 }
