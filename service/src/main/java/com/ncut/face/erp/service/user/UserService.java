@@ -11,6 +11,6 @@ public interface UserService {
 
     UserInfoModel getInfoByFaceId(String faceId);
 
-    void doLogin(UserLoginVo user);
+    String doLogin(UserLoginVo user);
 
 }

@@ -16,4 +16,5 @@ public class AttendanceModel {
     private String signInTimeStr;
     private String signOutTimeStr;
     private String attendanceStatus;
+    private String Date;
 }

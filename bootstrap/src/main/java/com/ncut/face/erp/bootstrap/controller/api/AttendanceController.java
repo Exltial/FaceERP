@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -66,6 +67,7 @@ public class AttendanceController {
                 item.setSignOutTimeStr(timeFormat.format(item.getSignOutTime()));
             }
         });
+        list.sort(Comparator.comparing(AttendanceModel::getSignInTime).reversed());
         return new Result<>(list);
     }
 }

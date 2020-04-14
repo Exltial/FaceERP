@@ -7,6 +7,7 @@ import com.ncut.face.erp.service.attendance.domain.AttendanceQuery;
 import com.ncut.face.erp.service.attendance.repository.AttendanceRepository;
 import com.ncut.face.erp.service.common.enums.RoleEnum;
 import com.ncut.face.erp.service.common.exception.BaseException;
+import com.ncut.face.erp.service.common.utils.DateUtil;
 import com.ncut.face.erp.service.user.domain.UserInfoModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,10 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +31,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public void signIn(UserInfoModel user) {
         if (user.getUserRole().equals(RoleEnum.ADMIN.getRoleCode())) {
-            throw new BaseException("管理员无须考勤");
+            throw new BaseException("管理员无需考勤");
         }
         AttendanceModel attendanceModel = new AttendanceModel();
         attendanceModel.setTenantId(user.getTenantId());
@@ -51,7 +55,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public void signOut(UserInfoModel user) {
         if (user.getUserRole().equals(RoleEnum.ADMIN.getRoleCode())) {
-            throw new BaseException("管理员无须考勤");
+            throw new BaseException("管理员无需考勤");
         }
         AttendanceModel attendanceModel = new AttendanceModel();
         attendanceModel.setTenantId(user.getTenantId());
@@ -67,6 +71,10 @@ public class AttendanceServiceImpl implements AttendanceService {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String date = format.format(new Date());
         query.setDate(date);
+        Date signInTime = attendanceRepository.getSignInTime(query);
+        if (signInTime == null) {
+            throw new BaseException("签退前请先签到");
+        }
         Date signOutTime = attendanceRepository.getSignOutTime(query);
         if (signOutTime != null) {
             attendanceRepository.deleteSignOutRecord(query);
@@ -86,21 +94,31 @@ public class AttendanceServiceImpl implements AttendanceService {
         if (CollectionUtils.isEmpty(attendanceList)) {
             return Lists.newArrayList();
         }
+        attendanceList.forEach(item -> {
+            if (item.getSignInTime() != null) {
+                item.setDate(DateUtil.format(item.getSignInTime(), DateUtil.SHORT));
+            }
+            if (item.getSignOutTime() != null) {
+                item.setDate(DateUtil.format(item.getSignOutTime(), DateUtil.SHORT));
+            }
+        });
         List<AttendanceModel> list = new ArrayList<>();
         Map<String, List<AttendanceModel>> map = attendanceList.stream().collect(Collectors.groupingBy(AttendanceModel::getFaceId));
         for (Map.Entry<String, List<AttendanceModel>> entry : map.entrySet()) {
-            AttendanceModel model = new AttendanceModel();
-            model.setFaceId(entry.getKey());
-            model.setUserName(entry.getValue().get(0).getUserName());
-            AttendanceModel attendanceModel = entry.getValue().stream().filter(item -> item.getSignInTime() != null).min(Comparator.comparing(AttendanceModel::getSignInTime)).orElse(null);
-            if (attendanceModel != null) {
-                model.setSignInTime(attendanceModel.getSignInTime());
-            }
-            AttendanceModel attendanceModel1 = entry.getValue().stream().filter(item -> item.getSignOutTime() != null).max(Comparator.comparing(AttendanceModel::getSignOutTime)).orElse(null);
-            if (attendanceModel1 != null) {
-                model.setSignOutTime(attendanceModel1.getSignOutTime());
-            }
-            list.add(model);
+            entry.getValue().forEach(item -> {
+                AttendanceModel model = new AttendanceModel();
+                model.setFaceId(entry.getKey());
+                model.setUserName(entry.getValue().get(0).getUserName());
+                if (item.getSignInTime() != null) {
+                    model.setSignInTime(item.getSignInTime());
+                    List<AttendanceModel> collect = entry.getValue().stream().filter(entity -> entity.getDate().equals(item.getDate()) && entity.getSignOutTime() != null).collect(Collectors.toList());
+                    if (!CollectionUtils.isEmpty(collect)) {
+                        model.setSignOutTime(collect.get(0).getSignOutTime());
+                    }
+                    model.setDate(DateUtil.format(model.getSignInTime(), DateUtil.DATE));
+                    list.add(model);
+                }
+            });
         }
         list.forEach(item -> {
             if (item.getSignInTime() == null || item.getSignOutTime() == null) {

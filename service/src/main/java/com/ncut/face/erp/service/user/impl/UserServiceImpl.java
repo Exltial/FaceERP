@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void doLogin(UserLoginVo user) {
+    public String doLogin(UserLoginVo user) {
         //添加用户认证信息
         Subject subject = SecurityUtils.getSubject();
         String password = "123456";
@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserService {
         try {
             //进行验证，这里可以捕获异常，然后返回对应信息
             subject.login(usernamePasswordToken);
+            return String.valueOf(subject.getSession().getId());
         } catch (AuthenticationException e) {
             throw new BaseException("用户未注册");
         } catch (AuthorizationException e) {

@@ -31,8 +31,8 @@ public class UserController {
     @RequestMapping("/login")
     public Result login(@RequestBody UserLoginVo user) {
         AssertUtil.notEmpty(user.getFaceId(), "未获取到人脸信息");
-        userService.doLogin(user);
-        return new Result<>(true);
+        String token = userService.doLogin(user);
+        return new Result<>(token);
     }
 
     @RequestMapping("/registry")
