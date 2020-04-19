@@ -12,10 +12,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.servlet.Filter;
-import java.util.HashMap;
-import java.util.Map;
-
 
 @Configuration
 public class ShiroConfig {
@@ -56,9 +52,6 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        Map<String, Filter> map = new HashMap<>();
-        map.put("/*", new ApplicationFilter());
-        shiroFilterFactoryBean.setFilters(map);
         return shiroFilterFactoryBean;
     }
 
