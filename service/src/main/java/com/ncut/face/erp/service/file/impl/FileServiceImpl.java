@@ -21,7 +21,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public String save(MultipartFile file, String path, String suffix, byte[] faceFeature) {
+    public String savePic(MultipartFile file, String path, String suffix, byte[] faceFeature) {
         String uniPicId = UUIDUtil.getShortUUID();
         String fileName = uniPicId + "." + suffix;
         //创建文件路径
@@ -32,7 +32,7 @@ public class FileServiceImpl implements FileService {
             dest.getParentFile().mkdirs();
         }
         try {
-            fileRepository.insertFile(uniPicId, path + fileName, faceFeature);
+            fileRepository.insertPic(uniPicId, path + fileName, faceFeature);
             file.transferTo(dest);
             return uniPicId;
         } catch (IOException e) {
@@ -44,5 +44,26 @@ public class FileServiceImpl implements FileService {
     @Override
     public String getPathById(String picId) {
         return fileRepository.getPathById(picId);
+    }
+
+    @Override
+    public String saveFile(MultipartFile file, String path, String suffix) {
+        String uniPicId = UUIDUtil.getShortUUID();
+        String fileName = uniPicId + "." + suffix;
+        //创建文件路径
+        File dest = new File(path + fileName);
+        // 检测是否存在目录
+        if (!dest.getParentFile().exists()) {
+            //假如文件不存在即重新创建新的文件已防止异常发生
+            dest.getParentFile().mkdirs();
+        }
+        try {
+            fileRepository.insertFile(uniPicId, path + fileName);
+            file.transferTo(dest);
+            return uniPicId;
+        } catch (IOException e) {
+            log.error("file upload failed==>e:", e);
+            throw new BaseException("图片上传异常,请重试");
+        }
     }
 }

@@ -24,7 +24,7 @@ public class AchievementsServiceImpl implements AchievementsService {
         AchievementsModel model = new AchievementsModel();
         model.setTenantId(user.getTenantId());
         model.setAchName(vo.getAchName());
-        model.setAchUrl(vo.getAchUrl());
+        model.setFileId(vo.getFileId());
         model.setAchType(vo.getAchType());
         model.setAchAuthor(vo.getAchAuthor());
         model.setCreator(user.getUserName());
@@ -59,7 +59,7 @@ public class AchievementsServiceImpl implements AchievementsService {
         model.setTenantId(user.getTenantId());
         model.setAchType(vo.getAchType());
         model.setAchName(vo.getAchName());
-        model.setAchUrl(vo.getAchUrl());
+        model.setFileId(vo.getFileId());
         model.setAchAuthor(vo.getAchAuthor());
         model.setModifier(user.getUserName());
         repository.updateAch(model);

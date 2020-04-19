@@ -37,14 +37,6 @@ public class AchievementsController {
         return new Result<>(list);
     }
 
-    @RequestMapping("/getAchievementInfo")
-    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
-    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
-    public Result getAchievementInfo(@RequestBody AchievementOpt opt) {
-        AchievementsModel model = achievementsService.getAchInfo(opt);
-        return new Result<>(model);
-    }
-
     @RequestMapping("/deleteAchievement")
     @RequiresPermissions(value = "ADMIN")
     @RequiresRoles(value = "ADMIN")

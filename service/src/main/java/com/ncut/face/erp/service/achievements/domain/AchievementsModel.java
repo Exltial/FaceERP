@@ -12,7 +12,7 @@ public class AchievementsModel {
     private Integer achType;
     private String achTypeDesc;
     private String achName;
-    private String achUrl;
+    private String fileId;
     private String achAuthor;
     private String creator;
     private String modifier;

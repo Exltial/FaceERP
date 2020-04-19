@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum AchievementTypeEnum {
-    PATENT(1, "专利"),
-    PAPER(2, "论文");
+    PATENT(0, "专利"),
+    PAPER(1, "论文");
     private Integer code;
     private String desc;
 

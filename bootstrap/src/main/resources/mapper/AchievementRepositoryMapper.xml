@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ncut.face.erp.service.achievements.repository.AchievementRepository">
     <insert id="addAch" parameterType="com.ncut.face.erp.service.achievements.domain.AchievementsModel">
-        INSERT INTO erp_achievement (tenant_id, ach_type, ach_name, ach_url, ach_author, creator, create_time, deleted)
-        VALUES (#{tenantId}, #{achType}, #{achName}, #{achUrl}, #{achAuthor}, #{creator}, now(), 0)
+        INSERT INTO erp_achievement (tenant_id, ach_type, ach_name, file_id, ach_author, creator, create_time, deleted)
+        VALUES (#{tenantId}, #{achType}, #{achName}, #{fileId}, #{achAuthor}, #{creator}, now(), 0)
     </insert>
     <select id="getAchList" parameterType="java.lang.String" resultType="com.ncut.face.erp.service.achievements.domain.AchievementsModel">
         SELECT *
@@ -31,7 +31,7 @@
         SET
         <if test="achType!=null">ach_type=#{achType},</if>
         <if test="achName!=null and achName!=''">ach_name=#{achName},</if>
-        <if test="achUrl!=null and achUrl!=''">ach_url=#{achUrl},</if>
+        <if test="fileId!=null and fileId!=''">file_id=#{fileId},</if>
         <if test="achAuthor!=null and achAuthor!=''">ach_author=#{achAuthor},</if>
         modifier=#{modifier},
         modify_time=now()

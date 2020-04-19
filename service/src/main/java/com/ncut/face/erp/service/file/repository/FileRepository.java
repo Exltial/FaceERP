@@ -5,9 +5,11 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface FileRepository {
-    void insertFile(String id, String path, byte[] faceFeature);
+    void insertPic(String id, String path, byte[] faceFeature);
 
     String getPathById(String picId);
 
     FileModel getFaceFeatureById(String faceId);
+
+    void insertFile(String fileId, String path);
 }
