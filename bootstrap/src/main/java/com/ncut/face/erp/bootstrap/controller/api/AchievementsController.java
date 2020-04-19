@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
+@RequestMapping("/achievement")
 public class AchievementsController {
     @Resource
     AchievementsService achievementsService;

@@ -25,6 +25,7 @@ public class AchievementsServiceImpl implements AchievementsService {
         model.setTenantId(user.getTenantId());
         model.setAchName(vo.getAchName());
         model.setAchUrl(vo.getAchUrl());
+        model.setAchType(vo.getAchType());
         model.setAchAuthor(vo.getAchAuthor());
         model.setCreator(user.getUserName());
         repository.addAch(model);
