@@ -52,4 +52,12 @@ public class AchievementsController {
         achievementsService.modifyAch(opt);
         return new Result<>(true);
     }
+
+    @RequestMapping("/getAchievementInfo")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result getAchievementInfo(@RequestBody AchievementOpt opt) {
+        AchievementsModel achInfo = achievementsService.getAchInfo(opt);
+        return new Result<>(achInfo);
+    }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("/assets")
 public class AssetsController {
     @Resource
     AssetsService assetsService;

@@ -29,7 +29,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public List getNoticeList() {
+    public List<NoticeModel> getNoticeList() {
         UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
         return noticeRepository.getNoticeList(user.getTenantId());
     }

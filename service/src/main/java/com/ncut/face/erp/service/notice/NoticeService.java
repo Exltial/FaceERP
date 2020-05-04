@@ -9,7 +9,7 @@ import java.util.List;
 public interface NoticeService {
     void addNotice(NoticeVo vo);
 
-    List getNoticeList();
+    List<NoticeModel> getNoticeList();
 
     NoticeModel getNoticeById(NoticeOperate opt);
 

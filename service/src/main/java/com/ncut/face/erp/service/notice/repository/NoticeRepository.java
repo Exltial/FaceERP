@@ -11,7 +11,7 @@ import java.util.List;
 public interface NoticeRepository {
     void addNotice(NoticeModel model);
 
-    List getNoticeList(String tenantId);
+    List<NoticeModel> getNoticeList(String tenantId);
 
     void deleteNotice(NoticeOperate opt);
 
