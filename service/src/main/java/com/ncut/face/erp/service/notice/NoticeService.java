@@ -16,4 +16,6 @@ public interface NoticeService {
     void deleteNotice(NoticeOperate opt);
 
     void modifyNotice(NoticeVo vo);
+
+    Integer getNoticeCount();
 }

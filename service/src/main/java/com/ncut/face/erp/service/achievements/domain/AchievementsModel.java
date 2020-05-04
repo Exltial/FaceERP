@@ -18,4 +18,6 @@ public class AchievementsModel {
     private String modifier;
     private Date createTime;
     private Date modifyTime;
+    private String createTimeDesc;
+    private String modifyTimeDesc;
 }

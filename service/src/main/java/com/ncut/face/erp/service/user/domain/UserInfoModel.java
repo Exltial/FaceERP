@@ -9,5 +9,6 @@ public class UserInfoModel {
     private String faceId;
     private String password;
     private String userRole;
+    private String imgUrl;
     private byte[] feature;
 }

@@ -22,4 +22,9 @@
         FROM erp_user
         WHERE face_id = #{faceId}
     </select>
+    <select id="getUserList" resultType="com.ncut.face.erp.service.user.domain.UserInfoModel">
+        SELECT user_name, face_id, user_role
+        FROM erp_user
+        WHERE tenant_id = #{tenantId}
+    </select>
 </mapper>

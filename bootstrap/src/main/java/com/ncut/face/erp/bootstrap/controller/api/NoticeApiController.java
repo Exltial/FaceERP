@@ -35,7 +35,7 @@ public class NoticeApiController {
     @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
     public Result getNoticeList() {
         List<NoticeModel> list = noticeService.getNoticeList();
-        list.forEach(item -> item.setCreateTimeDesc(DateUtil.format(item.getCreateTime(), "yyyy年MM月dd日 HH:mm")));
+        list.forEach(item -> item.setCreateTimeDesc(DateUtil.format(item.getCreateTime(), "yyyy年MM月dd日  HH:mm")));
         return new Result<>(list);
     }
 
@@ -61,5 +61,13 @@ public class NoticeApiController {
     public Result modifyNotice(@RequestBody NoticeVo vo) {
         noticeService.modifyNotice(vo);
         return new Result<>(true);
+    }
+
+    @RequestMapping("/getNoticeNum")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result getNoticeNum() {
+        Integer num = noticeService.getNoticeCount();
+        return new Result<>(num);
     }
 }

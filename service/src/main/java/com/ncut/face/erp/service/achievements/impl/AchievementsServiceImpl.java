@@ -6,6 +6,7 @@ import com.ncut.face.erp.service.achievements.domain.AchievementTypeEnum;
 import com.ncut.face.erp.service.achievements.domain.AchievementVo;
 import com.ncut.face.erp.service.achievements.domain.AchievementsModel;
 import com.ncut.face.erp.service.achievements.repository.AchievementRepository;
+import com.ncut.face.erp.service.common.utils.DateUtil;
 import com.ncut.face.erp.service.user.domain.UserInfoModel;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,10 @@ public class AchievementsServiceImpl implements AchievementsService {
     public List<AchievementsModel> getAchList() {
         UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
         List<AchievementsModel> achList = repository.getAchList(user.getTenantId());
-        achList.forEach(item -> item.setAchTypeDesc(AchievementTypeEnum.of(item.getAchType())));
+        achList.forEach(item -> {
+            item.setAchTypeDesc(AchievementTypeEnum.of(item.getAchType()));
+            item.setCreateTimeDesc(DateUtil.format(item.getCreateTime(), "yyyy-MM-dd"));
+        });
         return achList;
     }
 

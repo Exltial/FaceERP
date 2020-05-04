@@ -18,4 +18,6 @@ public interface NoticeRepository {
     void modifyNotice(NoticeModel vo);
 
     NoticeModel getNoticeById(@Param("tenantId") String tenantId, @Param("id") Long id);
+
+    Integer getNoticeCount(@Param("tenantId") String tenantId, @Param("date") String date);
 }

@@ -18,4 +18,6 @@ public interface UserRepository {
     List<FaceIdModel> getAllFeature(String tenantId);
 
     UserInfoModel getInfoByFaceId(String faceId);
+
+    List<UserInfoModel> getUserList(String tenantId);
 }

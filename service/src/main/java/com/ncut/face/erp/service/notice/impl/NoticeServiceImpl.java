@@ -1,5 +1,6 @@
 package com.ncut.face.erp.service.notice.impl;
 
+import com.ncut.face.erp.service.common.utils.DateUtil;
 import com.ncut.face.erp.service.notice.NoticeService;
 import com.ncut.face.erp.service.notice.domain.NoticeModel;
 import com.ncut.face.erp.service.notice.domain.NoticeOperate;
@@ -10,6 +11,7 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -55,5 +57,11 @@ public class NoticeServiceImpl implements NoticeService {
         model.setContent(vo.getContent());
         model.setModifier(user.getUserName());
         noticeRepository.modifyNotice(model);
+    }
+
+    @Override
+    public Integer getNoticeCount() {
+        UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
+        return noticeRepository.getNoticeCount(user.getTenantId(), DateUtil.format(new Date(), "yyyy-MM-dd"));
     }
 }
