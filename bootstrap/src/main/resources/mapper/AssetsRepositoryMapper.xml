@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ncut.face.erp.service.assets.repository.AssetsRepository">
     <insert id="addAssets" parameterType="com.ncut.face.erp.service.assets.domain.AssetsModel">
-        INSERT INTO erp_assets (tenant_id, assets_name, assets_id, assets_owner, assets_position, creator, create_time)
-        VALUES (#{tenantId}, #{assetsName}, #{assetsId}, #{assetsOwner}, #{assetsPosition}, #{creator}, now())
+        INSERT INTO erp_assets (tenant_id, assets_name, assets_id, assets_owner, assets_position, file_id, creator, create_time)
+        VALUES (#{tenantId}, #{assetsName}, #{assetsId}, #{assetsOwner}, #{assetsPosition}, #{fileId}, #{creator}, now())
     </insert>
     <select id="getAssetsList" parameterType="java.lang.String" resultType="com.ncut.face.erp.service.assets.domain.AssetsModel">
         SELECT *
@@ -33,6 +33,7 @@
         <if test="assetsId!=null and assetsId!=''">assets_id=#{assetsId},</if>
         <if test="assetsOwner!=null and assetsOwner!=''">assets_owner=#{assetsOwner},</if>
         <if test="assetsPosition!=null and assetsPosition!=''">assets_position=#{assetsPosition},</if>
+        <if test="fileId!=null and fileId!=''">file_id=#{fileId},</if>
         modifier=#{modifier},
         modify_time=now()
         WHERE tenant_id = #{tenantId}

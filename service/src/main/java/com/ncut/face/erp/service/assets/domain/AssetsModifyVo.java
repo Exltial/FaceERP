@@ -9,4 +9,5 @@ public class AssetsModifyVo {
     private String assetsId;
     private String assetsOwner;
     private String assetsPosition;
+    private String fileId;
 }

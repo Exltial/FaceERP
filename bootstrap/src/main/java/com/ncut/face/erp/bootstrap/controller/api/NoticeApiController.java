@@ -35,7 +35,7 @@ public class NoticeApiController {
     @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
     public Result getNoticeList() {
         List<NoticeModel> list = noticeService.getNoticeList();
-        list.forEach(item -> item.setCreateTimeDesc(DateUtil.format(item.getCreateTime(), "yyyy年MM月dd日  HH:mm")));
+        list.forEach(item -> item.setCreateTimeDesc(DateUtil.format(item.getCreateTime(), "yyyy年MM月dd日HH:mm")));
         return new Result<>(list);
     }
 

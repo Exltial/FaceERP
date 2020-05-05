@@ -12,6 +12,7 @@ public class AssetsModel {
     private String assetsId;
     private String assetsOwner;
     private String assetsPosition;
+    private String fileId;
     private String creator;
     private String modifier;
     private Date createTime;

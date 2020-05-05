@@ -10,6 +10,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -61,6 +62,16 @@ public class FileController {
         String suffix = fileName.substring(index + 1);
         String fileId = fileService.saveFile(file, rootPath + registryPath, suffix);
         return new Result<>(fileId);
+    }
+
+    @RequestMapping("/getPath/{id}")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result getPathByFileId(@PathVariable("id") String id) {
+        String pathById = fileService.getPathById(id);
+        String[] split = pathById.split("/");
+        String path = split[split.length - 1];
+        return new Result<>(path);
     }
 
     @RequestMapping("/downLoadFile")

@@ -9,4 +9,5 @@ public class AssetsAddVo {
     private String assetsId;
     private String assetsOwner;
     private String assetsPosition;
+    private String fileId;
 }
