@@ -29,3 +29,8 @@ build/
 
 ### VS Code ###
 .vscode/
+/service/mvnw
+/service/mvnw.cmd
+/bootstrap/.mvn/wrapper/maven-wrapper.jar
+/bootstrap/mvnw
+/bootstrap/mvnw.cmd

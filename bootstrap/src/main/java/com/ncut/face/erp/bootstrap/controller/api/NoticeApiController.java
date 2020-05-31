@@ -1,6 +1,7 @@
 package com.ncut.face.erp.bootstrap.controller.api;
 
 import com.ncut.face.erp.service.common.Result;
+import com.ncut.face.erp.service.common.utils.DateUtil;
 import com.ncut.face.erp.service.notice.NoticeService;
 import com.ncut.face.erp.service.notice.domain.NoticeModel;
 import com.ncut.face.erp.service.notice.domain.NoticeOperate;
@@ -16,6 +17,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
+@RequestMapping("/notice")
 public class NoticeApiController {
     @Resource
     NoticeService noticeService;
@@ -32,7 +34,8 @@ public class NoticeApiController {
     @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
     @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
     public Result getNoticeList() {
-        List list = noticeService.getNoticeList();
+        List<NoticeModel> list = noticeService.getNoticeList();
+        list.forEach(item -> item.setCreateTimeDesc(DateUtil.format(item.getCreateTime(), "yyyy年MM月dd日HH:mm")));
         return new Result<>(list);
     }
 
@@ -58,5 +61,13 @@ public class NoticeApiController {
     public Result modifyNotice(@RequestBody NoticeVo vo) {
         noticeService.modifyNotice(vo);
         return new Result<>(true);
+    }
+
+    @RequestMapping("/getNoticeNum")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result getNoticeNum() {
+        Integer num = noticeService.getNoticeCount();
+        return new Result<>(num);
     }
 }

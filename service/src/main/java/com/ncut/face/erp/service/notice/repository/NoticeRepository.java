@@ -11,11 +11,13 @@ import java.util.List;
 public interface NoticeRepository {
     void addNotice(NoticeModel model);
 
-    List getNoticeList(String tenantId);
+    List<NoticeModel> getNoticeList(String tenantId);
 
     void deleteNotice(NoticeOperate opt);
 
     void modifyNotice(NoticeModel vo);
 
     NoticeModel getNoticeById(@Param("tenantId") String tenantId, @Param("id") Long id);
+
+    Integer getNoticeCount(@Param("tenantId") String tenantId, @Param("date") String date);
 }

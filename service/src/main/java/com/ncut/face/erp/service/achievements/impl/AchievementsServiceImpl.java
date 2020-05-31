@@ -6,6 +6,7 @@ import com.ncut.face.erp.service.achievements.domain.AchievementTypeEnum;
 import com.ncut.face.erp.service.achievements.domain.AchievementVo;
 import com.ncut.face.erp.service.achievements.domain.AchievementsModel;
 import com.ncut.face.erp.service.achievements.repository.AchievementRepository;
+import com.ncut.face.erp.service.common.utils.DateUtil;
 import com.ncut.face.erp.service.user.domain.UserInfoModel;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,8 @@ public class AchievementsServiceImpl implements AchievementsService {
         AchievementsModel model = new AchievementsModel();
         model.setTenantId(user.getTenantId());
         model.setAchName(vo.getAchName());
-        model.setAchUrl(vo.getAchUrl());
+        model.setFileId(vo.getFileId());
+        model.setAchType(vo.getAchType());
         model.setAchAuthor(vo.getAchAuthor());
         model.setCreator(user.getUserName());
         repository.addAch(model);
@@ -34,7 +36,10 @@ public class AchievementsServiceImpl implements AchievementsService {
     public List<AchievementsModel> getAchList() {
         UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
         List<AchievementsModel> achList = repository.getAchList(user.getTenantId());
-        achList.forEach(item -> item.setAchTypeDesc(AchievementTypeEnum.of(item.getAchType())));
+        achList.forEach(item -> {
+            item.setAchTypeDesc(AchievementTypeEnum.of(item.getAchType()));
+            item.setCreateTimeDesc(DateUtil.format(item.getCreateTime(), "yyyy-MM-dd"));
+        });
         return achList;
     }
 
@@ -58,7 +63,7 @@ public class AchievementsServiceImpl implements AchievementsService {
         model.setTenantId(user.getTenantId());
         model.setAchType(vo.getAchType());
         model.setAchName(vo.getAchName());
-        model.setAchUrl(vo.getAchUrl());
+        model.setFileId(vo.getFileId());
         model.setAchAuthor(vo.getAchAuthor());
         model.setModifier(user.getUserName());
         repository.updateAch(model);

@@ -4,6 +4,8 @@ import com.ncut.face.erp.service.user.domain.UserInfoModel;
 import com.ncut.face.erp.service.user.domain.UserLoginVo;
 import com.ncut.face.erp.service.user.domain.UserRegistryVo;
 
+import java.util.List;
+
 public interface UserService {
     void doRegistry(UserRegistryVo vo);
 
@@ -13,4 +15,5 @@ public interface UserService {
 
     String doLogin(UserLoginVo user);
 
+    List<UserInfoModel> getUserList();
 }

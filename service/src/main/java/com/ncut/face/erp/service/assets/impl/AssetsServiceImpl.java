@@ -27,8 +27,8 @@ public class AssetsServiceImpl implements AssetsService {
         model.setAssetsId(vo.getAssetsId());
         model.setAssetsOwner(vo.getAssetsOwner());
         model.setAssetsPosition(vo.getAssetsPosition());
+        model.setFileId(vo.getFileId());
         model.setCreator(user.getUserName());
-
         assetsRepository.addAssets(model);
     }
 
@@ -48,6 +48,7 @@ public class AssetsServiceImpl implements AssetsService {
         model.setAssetsId(vo.getAssetsId());
         model.setAssetsOwner(vo.getAssetsOwner());
         model.setAssetsPosition(vo.getAssetsPosition());
+        model.setFileId(vo.getFileId());
         model.setModifier(user.getUserName());
         assetsRepository.modifyAssets(model);
     }

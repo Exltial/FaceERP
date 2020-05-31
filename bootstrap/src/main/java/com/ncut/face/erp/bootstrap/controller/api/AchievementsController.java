@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
+@RequestMapping("/achievement")
 public class AchievementsController {
     @Resource
     AchievementsService achievementsService;
@@ -36,14 +37,6 @@ public class AchievementsController {
         return new Result<>(list);
     }
 
-    @RequestMapping("/getAchievementInfo")
-    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
-    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
-    public Result getAchievementInfo(@RequestBody AchievementOpt opt) {
-        AchievementsModel model = achievementsService.getAchInfo(opt);
-        return new Result<>(model);
-    }
-
     @RequestMapping("/deleteAchievement")
     @RequiresPermissions(value = "ADMIN")
     @RequiresRoles(value = "ADMIN")
@@ -58,5 +51,13 @@ public class AchievementsController {
     public Result modifyAchievement(@RequestBody AchievementVo opt) {
         achievementsService.modifyAch(opt);
         return new Result<>(true);
+    }
+
+    @RequestMapping("/getAchievementInfo")
+    @RequiresPermissions(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    @RequiresRoles(value = {"ADMIN", "USER"}, logical = Logical.OR)
+    public Result getAchievementInfo(@RequestBody AchievementOpt opt) {
+        AchievementsModel achInfo = achievementsService.getAchInfo(opt);
+        return new Result<>(achInfo);
     }
 }

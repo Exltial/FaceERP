@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ncut.face.erp.service.monitor.repository.MonitorRepository">
+    <insert id="addCam" parameterType="com.ncut.face.erp.service.monitor.domain.MonitorModel">
+        INSERT INTO erp_monitor (tenant_id, cam_name, cam_url, creator, deleted)
+        VALUES (#{tenantId}, #{camName}, #{camUrl}, #{creator}, 0)
+    </insert>
+    <select id="findCamList" resultType="com.ncut.face.erp.service.monitor.domain.MonitorModel">
+        SELECT *
+        FROM erp_monitor
+        WHERE tenant_id = #{tenantId}
+          AND deleted = 0
+    </select>
+    <select id="getCamById" resultType="com.ncut.face.erp.service.monitor.domain.MonitorModel">
+        SELECT *
+        FROM erp_monitor
+        WHERE tenant_id = #{tenantId}
+          AND id = #{id}
+          AND deleted = 0
+    </select>
+    <update id="deleteCam">
+        UPDATE erp_monitor
+        SET deleted=1
+        WHERE tenant_id = #{tenantId}
+          AND id = #{id}
+    </update>
+</mapper>

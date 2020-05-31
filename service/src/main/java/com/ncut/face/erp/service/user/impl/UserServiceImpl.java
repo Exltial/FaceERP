@@ -122,4 +122,17 @@ public class UserServiceImpl implements UserService {
             throw new BaseException("没有权限");
         }
     }
+
+    @Override
+    public List<UserInfoModel> getUserList() {
+        UserInfoModel user = (UserInfoModel) SecurityUtils.getSubject().getSession().getAttribute("user");
+        List<UserInfoModel> userList = userRepository.getUserList(user.getTenantId());
+        userList.forEach(item -> {
+            String pathById = fileRepository.getPathById(item.getFaceId());
+            String[] split = pathById.split("/");
+            String imgUrl = "/static/" + split[split.length - 1];
+            item.setImgUrl(imgUrl);
+        });
+        return userList;
+    }
 }

@@ -12,6 +12,6 @@ public class AchievementVo {
      */
     private Integer achType;
     private String achName;
-    private String achUrl;
+    private String fileId;
     private String achAuthor;
 }
